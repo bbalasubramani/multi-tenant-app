@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react'; // <-- Add useCallback here
 import axios from 'axios';
 import './App.css';
 
@@ -12,7 +12,8 @@ function App() {
   const [error, setError] = useState('');
   const [loginForm, setLoginForm] = useState({ email: '', password: '' });
 
-  const fetchNotes = async () => {
+  // Wrap fetchNotes with useCallback to make it stable
+  const fetchNotes = useCallback(async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/notes`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -21,7 +22,7 @@ function App() {
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [token]); // <-- Its dependency is 'token'
 
   useEffect(() => {
     if (token) {
@@ -29,7 +30,7 @@ function App() {
       const decodedUser = JSON.parse(atob(token.split('.')[1]));
       setUser(decodedUser);
     }
-  }, [token, fetchNotes]); // <- 'fetchNotes' added here to fix the error
+  }, [token, fetchNotes]); // <-- 'fetchNotes' is now a stable dependency
 
   const handleLogin = async (e) => {
     e.preventDefault();

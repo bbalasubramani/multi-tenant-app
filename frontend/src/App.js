@@ -12,15 +12,6 @@ function App() {
   const [error, setError] = useState('');
   const [loginForm, setLoginForm] = useState({ email: '', password: '' });
 
-
-  useEffect(() => {
-    if (token) {
-      fetchNotes();
-      const decodedUser = JSON.parse(atob(token.split('.')[1]));
-      setUser(decodedUser);
-    }
-  }, [token]);
-
   const fetchNotes = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/notes`, {
@@ -31,6 +22,14 @@ function App() {
       console.error(err);
     }
   };
+
+  useEffect(() => {
+    if (token) {
+      fetchNotes();
+      const decodedUser = JSON.parse(atob(token.split('.')[1]));
+      setUser(decodedUser);
+    }
+  }, [token, fetchNotes]); // <- 'fetchNotes' added here to fix the error
 
   const handleLogin = async (e) => {
     e.preventDefault();

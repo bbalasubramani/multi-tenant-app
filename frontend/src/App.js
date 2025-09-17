@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
 
-const API_BASE_URL = 'https://multi-tenant-notes-cyan.vercel.app/'; 
+const API_BASE_URL = 'https://multi-tenant-app-zeta.vercel.app/'; 
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token'));
